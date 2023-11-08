@@ -18,13 +18,13 @@ export default function AddTimer() {
     addTimer({ name, duration });
 
     console.log(extractedData);
-    // form.current?.clear();
+    form.current?.clear();
   }
 
   return (
     <Form ref={form} onSave={handleSaveTimer} id="add-timer">
-      <Input type="text" label="Name" id="name" value={10} />
-      <Input type="number" label="Duration" id="duration" value={10} />
+      <Input type="text" label="Name" id="name" defaultValue={10} />
+      <Input type="number" label="Duration" id="duration" defaultValue={10} />
       <p>
         <Button>Add Timer</Button>
       </p>
