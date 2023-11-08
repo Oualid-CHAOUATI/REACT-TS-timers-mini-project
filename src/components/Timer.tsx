@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { TTimer, useTimersContext } from "../store/Timers-ctx.tsx";
 import Container from "./UI/Container.tsx";
 
-const TIMER_INTEVAL = 1000;
+const TIMER_INTEVAL = 50;
 export default function TimerList({ name, duration }: TTimer) {
   //duration en s ==> convertir en ms
   const [remainingTime, setRemainingTimer] = useState(duration * 1000);
@@ -22,26 +22,24 @@ export default function TimerList({ name, duration }: TTimer) {
     }
 
     if (!isRunning) return clear();
-    if (remainingTime <= 0) {
-      if (end === null) setEnd(Date.now());
-
-      return clear();
-    }
+    // ! ###if (remainingTime <= 0)  if (end === null) setEnd(Date.now());return clear(); .. ( I adde dthe dependency because of this)
 
     interval.current = setInterval(() => {
       setRemainingTimer((t) => {
         const newRemaining = t - TIMER_INTEVAL;
-        if (newRemaining <= 0 && end === null) {
-          setEnd(Date.now());
-        }
+        //!-------------------------------------------------------------
+        if (newRemaining <= 0 && end === null) setEnd(Date.now()); //! decie when to set end
+        //!-------------------------------------------------------------
+
         return newRemaining > 0 ? newRemaining : 0;
       });
     }, TIMER_INTEVAL);
 
-    console.log(interval.current);
+    // console.log(interval.current);
 
     return clear;
-  }, [isRunning, end]);
+  }, [isRunning, end, remainingTime]);
+  // }, [isRunning, end,remainingTime]); //!#### this code will push the useEffect whenever the remaining time updates ..; wich means too often .. therefore the timr will be slow and would take more then what its should !  you can try it
   return (
     <Container as="article">
       <p>Start : {start}</p>
